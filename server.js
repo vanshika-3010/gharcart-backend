@@ -5,6 +5,7 @@ import { connectDB } from './config/db.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 import authMiddleware from './middleware/auth.js';
 import userRouter from './routes/userRoute.js';
@@ -19,19 +20,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middleware
-// MIDDLEWARE 
 app.use(
-    cors({
-        origin: (origin, callback) => {
-            const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://gharcart-frontend.vercel.app'];
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error('Not allowed by CORS'));
-            }
-        },
-        credentials: true,
-    })
+  cors({
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'https://gharcart-frontend.vercel.app'
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -41,16 +45,28 @@ console.log("Connecting to MongoDB...");
 connectDB();
 
 // Routes
-app.use("/api/user", userRouter)
+app.use("/api/user", userRouter);
 app.use('/api/cart', authMiddleware, cartRouter);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/api/items', itemrouter)
-app.use('/api/orders', orderrouter)
+app.use('/api/items', itemrouter);
+app.use('/api/orders', orderrouter);
+
+// Serve uploads folder for images
+const uploadsPath = path.join(__dirname, 'uploads');
+app.use('/uploads', express.static(uploadsPath));
+
+// Log uploads folder contents on startup
+fs.readdir(uploadsPath, (err, files) => {
+  if (err) {
+    console.log('Uploads folder error:', err);
+  } else {
+    console.log('Uploads folder contents:', files);
+  }
+});
 
 app.get('/', (req, res) => {
-    res.send('API Working');
+  res.send('API Working');
 });
 
 app.listen(port, () => {
-    console.log(`Server Started on port ${port}`);
+  console.log(`Server Started on port ${port}`);
 });
