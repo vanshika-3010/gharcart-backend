@@ -37,6 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Database Connection
+console.log("Connecting to MongoDB...");
 connectDB();
 
 // Routes
