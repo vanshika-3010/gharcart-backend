@@ -4,7 +4,7 @@ This is the backend server for the GharCart e-commerce application, built using 
 
 ## 🌐 Live API
 
-🔗 Base URL (Railway): https://your-backend.railway.app
+🔗 Base URL (Railway):https://gharcart-backend-production.up.railway.app/
 
 🧰 Tech Stack
 Node.js – Runtime environment
@@ -37,8 +37,11 @@ Deployment on Railway
 
 ## 📌 Future Improvements
 🔔 Email notifications
+
 💳 Payment gateway integration
+
 📊 Admin dashboard analytics
+
 🧾 Invoice generation
 
 👩‍💻 Author
